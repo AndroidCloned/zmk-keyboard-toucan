@@ -23,6 +23,15 @@ include:
   - board: xiao_ble//zmk
     shield: toucan_left rgbled_adapter nice_view_gem
     artifact-name: toucan_left_no_studio
+  # USB CDC logging for bring-up (flash this, keep USB plugged, then capture COM port).
+  - board: xiao_ble//zmk
+    shield: toucan_left rgbled_adapter nice_view_gem
+    snippet: zmk-usb-logging
+    cmake-args: >-
+      -DCONFIG_LOG_PROCESS_THREAD_STARTUP_DELAY_MS=8000
+      -DCONFIG_ZMK_LOG_LEVEL_DBG=y
+      -DCONFIG_DISPLAY_LOG_LEVEL_DBG=y
+    artifact-name: toucan_left_usb_logging
   - board: xiao_ble//zmk
     shield: toucan_left rgbled_adapter nice_view_gem
     snippet: studio-rpc-usb-uart
