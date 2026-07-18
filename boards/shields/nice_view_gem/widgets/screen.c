@@ -222,10 +222,8 @@ static int display_activity_event_handler(const zmk_event_t *eh) {
     case ZMK_ACTIVITY_SLEEP:
         set_sleep_screen_active(true);
         force_redraw_all_widgets();
-        // Force LVGL to process pending updates and flush to display hardware
-        // before the CPU enters deep sleep
+        /* Flush pending LVGL work before deep sleep (same helper ZMK main uses). */
         lv_task_handler();
-        lv_refr_now(NULL);
         break;
     default:
         break; // ignore other states (like IDLE)

@@ -1,6 +1,6 @@
 #include <zephyr/kernel.h>
-#include <drivers/behavior.h>
 #include <stdio.h>
+#include <inttypes.h>
 #include <string.h>
 
 #include "layer.h"

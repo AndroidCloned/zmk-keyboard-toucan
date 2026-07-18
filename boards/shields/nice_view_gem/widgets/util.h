@@ -6,12 +6,18 @@
 #define SCREEN_WIDTH 144
 #define SCREEN_HEIGHT 168
 
-#define BUFFER_SIZE 168
-#define BUFFER_OFFSET_MIDDLE 0
-#define BUFFER_OFFSET_BOTTOM 0
+/* Match upstream nice!view: L8 canvas is what LVGL 9 drawing expects;
+ * the 1-bit Sharp panel is handled by the display pipeline. */
+#define CANVAS_COLOR_FORMAT LV_COLOR_FORMAT_L8
+#define CANVAS_BUF_SIZE                                                                    \
+    LV_CANVAS_BUF_SIZE(SCREEN_WIDTH, SCREEN_HEIGHT, LV_COLOR_FORMAT_GET_BPP(CANVAS_COLOR_FORMAT), \
+                       LV_DRAW_BUF_STRIDE_ALIGN)
 
-#define LVGL_BACKGROUND lv_color_black()
-#define LVGL_FOREGROUND lv_color_white()
+/* Preserve nice_view_gem polarity (black background / white ink by default). */
+#define LVGL_BACKGROUND                                                                    \
+    IS_ENABLED(CONFIG_NICE_VIEW_WIDGET_INVERTED) ? lv_color_white() : lv_color_black()
+#define LVGL_FOREGROUND                                                                    \
+    IS_ENABLED(CONFIG_NICE_VIEW_WIDGET_INVERTED) ? lv_color_black() : lv_color_white()
 
 struct status_state {
     uint8_t battery;
@@ -29,8 +35,6 @@ struct status_state {
     bool connected;
 #endif
 };
-
-#define CANVAS_COLOR_FORMAT LV_COLOR_FORMAT_NATIVE
 
 void to_uppercase(char *str);
 void fill_background(lv_obj_t *canvas);

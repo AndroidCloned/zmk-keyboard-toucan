@@ -19,7 +19,8 @@ Firmware builds automatically on push via GitHub Actions. Download the `firmware
 
 | Half | UF2 file |
 |------|----------|
-| Left (display, central) | `toucan_left rgbled_adapter nice_view_gem-xiao_ble__zmk-zmk.uf2` |
+| Left (display, no Studio — try first) | `toucan_left_no_studio.uf2` (or similar name from the artifact) |
+| Left (display + Studio) | `toucan_left_with_studio.uf2` |
 | Right (trackpad, peripheral) | `toucan_right rgbled_adapter-xiao_ble__zmk-zmk.uf2` |
 | Settings reset (optional) | `settings_reset-xiao_ble__zmk-zmk.uf2` |
 
@@ -40,7 +41,16 @@ The `nightly` branch tracks upstream ZMK `main`. It builds and produces UF2s, bu
 
 - `Deprecated symbol KSCAN is enabled` — expected during the ZMK/Zephyr migration.
 - `ZMK_USB` assigned but disabled on the **right** half — expected; USB is central-only on split builds.
-- Left-half RAM usage is high (~64% on last successful build). Builds pass, but there is little headroom for adding features without another RAM trim.
+- Left-half RAM usage is high with Studio enabled. Prefer the `toucan_left_no_studio` artifact first when validating display/boot.
+
+### Display / LVGL notes (`nightly`)
+
+The nice!view is a 1-bit Sharp LS0XX panel. On ZMK main (LVGL 9) the status canvas must use `LV_COLOR_FORMAT_L8` with a properly sized `LV_CANVAS_BUF_SIZE` buffer — matching upstream `nice_view`. Using `LV_COLOR_FORMAT_NATIVE` with an `lv_color_t[]` buffer can compile but fail to render (blank display / unstable boot).
+
+Artifacts:
+
+- `toucan_left_no_studio` — left half without ZMK Studio (recommended first flash for display bring-up)
+- `toucan_left_with_studio` — left half with Studio RPC over USB
 
 ### What CI does **not** test
 

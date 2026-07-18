@@ -19,10 +19,15 @@
 #
 ---
 include:
+  # Prefer this first when validating display/boot on ZMK main (less RAM than Studio).
+  - board: xiao_ble//zmk
+    shield: toucan_left rgbled_adapter nice_view_gem
+    artifact-name: toucan_left_no_studio
   - board: xiao_ble//zmk
     shield: toucan_left rgbled_adapter nice_view_gem
     snippet: studio-rpc-usb-uart
     cmake-args: -DCONFIG_ZMK_STUDIO=y
+    artifact-name: toucan_left_with_studio
   - board: xiao_ble//zmk
     shield: toucan_right rgbled_adapter
   - board: xiao_ble//zmk
