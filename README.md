@@ -45,7 +45,10 @@ The `nightly` branch tracks upstream ZMK `main`. It builds and produces UF2s, bu
 
 ### Display / LVGL notes (`nightly`)
 
-The nice!view is a 1-bit Sharp LS0XX panel. On ZMK main (LVGL 9) the status canvas must use `LV_COLOR_FORMAT_L8` with a properly sized `LV_CANVAS_BUF_SIZE` buffer — matching upstream `nice_view`. Using `LV_COLOR_FORMAT_NATIVE` with an `lv_color_t[]` buffer can compile but fail to render (blank display / unstable boot).
+The nice!view is a 1-bit Sharp LS0XX panel. On ZMK main (LVGL 9 / Zephyr 4.1):
+
+- Status canvas must use `LV_COLOR_FORMAT_L8` with `LV_CANVAS_BUF_SIZE` (upstream `nice_view` pattern).
+- Overlay must set `serial-vcom-inversion` + `serial-vcom-interval` when EXTCOMIN is unused ([zmk#3294](https://github.com/zmkfirmware/zmk/pull/3294)). Without VCOM the panel looks blank even if firmware is running.
 
 Artifacts:
 

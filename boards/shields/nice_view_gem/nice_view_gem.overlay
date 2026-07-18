@@ -12,6 +12,11 @@
         reg = <0>;
         width = <144>;
         height = <168>;
+        /* Required on Zephyr 4.1+ LS0XX driver when EXTCOMIN is unused.
+         * Without this the panel sits DC-biased and appears blank.
+         * Matches zmkfirmware/zmk#3294 for upstream nice_view. */
+        serial-vcom-inversion;
+        serial-vcom-interval = <33>;
     };
 };
 

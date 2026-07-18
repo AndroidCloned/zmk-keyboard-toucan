@@ -54,6 +54,8 @@ static void draw_top(lv_obj_t *widget, const struct status_state *state) {
     draw_profile_status(canvas, state);
     draw_battery_status(canvas, state);
     draw_battery_peripheral_status(canvas, state);
+
+    lv_obj_invalidate(canvas);
 }
 
 /**
@@ -251,6 +253,10 @@ int zmk_widget_screen_init(struct zmk_widget_screen *widget, lv_obj_t *parent) {
     widget_battery_peripheral_status_init();
     widget_layer_status_init();
     widget_output_status_init();
+
+    /* Force an initial paint; listeners alone can leave a blank panel until
+     * the first battery/endpoint event arrives. */
+    draw_top(widget->obj, &widget->state);
 
     return 0;
 }
