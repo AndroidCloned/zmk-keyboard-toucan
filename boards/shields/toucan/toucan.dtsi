@@ -107,7 +107,14 @@
         compatible = "zmk,input-listener";
         status = "disabled";
         device = <&glidepoint_split>;
-        input-processors = <&zip_xy_scaler 250 100>;
+        /* Scaler + X invert: upstream Cirque invert-x is absolute-mode only;
+         * stable/geeksville applied X invert in relative mode. */
+        input-processors = <
+            &zip_xy_transform INPUT_TRANSFORM_X_INVERT
+            &zip_xy_scaler 250 100
+        >;
+        /* Hold NAV (1) or SYM (2): pad motion becomes scroll (Toucan design).
+         * Hardware ASIC scroll/secondary-tap stay off in Zephyr's Cirque driver. */
         scroller {
             layers = <1 2>;
             input-processors = <

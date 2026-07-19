@@ -66,9 +66,12 @@
          * here stops EDGE_TO_ACTIVE IRQs and kills the trackpad. */
         data-ready-gpios = <&gpio0 2 GPIO_ACTIVE_HIGH>;
         sensitivity = "2x";
-        invert-x;
-        /* Upstream Cirque defaults taps off; geeksville module had them on. */
+        data-mode = "relative";
+        /* Upstream Cirque defaults taps off; geeksville had them on.
+         * Reports as BTN_TOUCH → ZMK maps that to left mouse button. */
         primary-tap-enable;
+        /* Note: secondary-tap / ASIC edge-scroll are hardcoded off in Zephyr's
+         * Cirque driver. Scroll uses NAV/SYM layer scroller on the left half. */
 
         // Optional: turning this on enables very aggressive power saving, after 5 seconds with no touches
         // the trackpad will go to sleep.  It wakes up on touch, but there is a ~300ms delay.  Most users will find
