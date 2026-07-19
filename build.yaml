@@ -19,6 +19,12 @@
 #
 ---
 include:
+  # Bisect: ZMK main left WITHOUT display. If this enumerates USB, nice_view_gem is the crash.
+  - board: xiao_ble//zmk
+    shield: toucan_left rgbled_adapter
+    snippet: studio-rpc-usb-uart
+    cmake-args: -DCONFIG_ZMK_STUDIO=y
+    artifact-name: toucan_left_bare_studio
   # Prefer this first when validating display/boot on ZMK main (less RAM than Studio).
   - board: xiao_ble//zmk
     shield: toucan_left rgbled_adapter nice_view_gem
