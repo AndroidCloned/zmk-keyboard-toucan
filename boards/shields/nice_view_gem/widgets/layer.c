@@ -9,19 +9,20 @@
 #include <zmk/keymap.h>
 #include <zmk/matrix.h>
 
-LV_IMG_DECLARE(pegasus);
+LV_IMG_DECLARE(unicorn_60x50);
 
 #define BASE_LAYER_INDEX 0
+#define UNICORN_W 60
+#define UNICORN_H 50
 
 void draw_layer_status(lv_obj_t *canvas, const struct status_state *state) {
-    /* BASE: show pegasus icon instead of the layer name text. */
+    /* BASE: show unicorn icon instead of the layer name text. */
     if (state->layer_index == BASE_LAYER_INDEX) {
         lv_draw_image_dsc_t img_dsc;
         lv_draw_image_dsc_init(&img_dsc);
-        /* 72x62 icon centered in the middle of the 144x168 panel. */
-        const lv_coord_t x = (SCREEN_WIDTH - 72) / 2;
-        const lv_coord_t y = 52;
-        canvas_draw_img(canvas, x, y, &pegasus, &img_dsc);
+        const lv_coord_t x = (SCREEN_WIDTH - UNICORN_W) / 2;
+        const lv_coord_t y = 58;
+        canvas_draw_img(canvas, x, y, &unicorn_60x50, &img_dsc);
         return;
     }
 
