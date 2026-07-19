@@ -25,7 +25,8 @@ choice ZMK_DISPLAY_STATUS_SCREEN
 endchoice
 
 config LV_Z_MEM_POOL_SIZE
-    default 8192 if ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
+    # Full-frame 144x168 L8 draws need more than nice!view's 8K tile budget.
+    default 24576 if ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
 
 config ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
     imply NICE_VIEW_WIDGET_STATUS
