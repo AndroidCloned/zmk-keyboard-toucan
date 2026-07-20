@@ -202,13 +202,6 @@ ZMK_SUBSCRIPTION(widget_output_status, zmk_ble_active_profile_changed);
  * Activity state handling for sleep screen
  **/
 
-static void force_redraw_all_widgets(void) {
-    struct zmk_widget_screen *widget;
-    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) {
-        draw_top(widget->obj, &widget->state);
-    }
-}
-
 static int display_activity_event_handler(const zmk_event_t *eh) {
     struct zmk_activity_state_changed *ev = as_zmk_activity_state_changed(eh);
     if (ev == NULL) {
@@ -218,14 +211,12 @@ static int display_activity_event_handler(const zmk_event_t *eh) {
     switch (ev->state) {
     case ZMK_ACTIVITY_ACTIVE:
         set_sleep_screen_active(false);
-        // No need to force a redraw, it will happen automatically if really coming back from sleep (ACTIVE also comes after IDLE)
-        //force_redraw_all_widgets();
         break;
     case ZMK_ACTIVITY_SLEEP:
+        /* Mark sleep UI only. Do NOT paint or call lv_timer_handler here:
+         * this runs on the activity thread immediately before device suspend /
+         * sys_poweroff. SPI+LVGL on that path raced PM and hung centrals. */
         set_sleep_screen_active(true);
-        force_redraw_all_widgets();
-        /* Flush pending LVGL work before deep sleep (LVGL 9). */
-        lv_timer_handler();
         break;
     default:
         break; // ignore other states (like IDLE)
