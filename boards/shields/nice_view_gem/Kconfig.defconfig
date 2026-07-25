@@ -26,7 +26,8 @@ endchoice
 
 config LV_Z_MEM_POOL_SIZE
     # Full-frame 144x168 L8 draws need more than nice!view's 8K tile budget.
-    default 24576 if ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
+    # Bumped further: long-session freezes / stuck layer paints on LVGL 9.
+    default 32768 if ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
 
 config ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
     imply NICE_VIEW_WIDGET_STATUS
@@ -39,11 +40,7 @@ config NICE_VIEW_WIDGET_STATUS
 config NICE_VIEW_WIDGET_INVERTED
     bool "Invert display colors"
 
-if !ZMK_SPLIT || ZMK_SPLIT_ROLE_CENTRAL
-
-config NICE_VIEW_WIDGET_STATUS
-    select ZMK_WPM
-
-endif # !ZMK_SPLIT || ZMK_SPLIT_ROLE_CENTRAL
+# Do NOT select ZMK_WPM here. Gem never paints WPM, and the WPM widget path
+# has been implicated in display freezes on Zephyr 4.1 / LVGL 9.
 
 endif # SHIELD_NICE_VIEW_GEM
