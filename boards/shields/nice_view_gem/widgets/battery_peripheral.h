@@ -4,10 +4,8 @@
 #include "util.h"
 
 struct battery_peripheral_status_state {
-    uint8_t level;
-#if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
-    bool usb_present;
-#endif
+	uint8_t level;
+	bool charging;
 };
 
 void draw_battery_peripheral_status(lv_obj_t *canvas, const struct status_state *state);

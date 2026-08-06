@@ -10,41 +10,45 @@
  * the 1-bit Sharp panel is handled by the display pipeline. */
 #define CANVAS_COLOR_FORMAT LV_COLOR_FORMAT_L8
 #define CANVAS_BUF_SIZE                                                                    \
-    LV_CANVAS_BUF_SIZE(SCREEN_WIDTH, SCREEN_HEIGHT, LV_COLOR_FORMAT_GET_BPP(CANVAS_COLOR_FORMAT), \
-                       LV_DRAW_BUF_STRIDE_ALIGN)
+	LV_CANVAS_BUF_SIZE(SCREEN_WIDTH, SCREEN_HEIGHT,                                    \
+			   LV_COLOR_FORMAT_GET_BPP(CANVAS_COLOR_FORMAT),                    \
+			   LV_DRAW_BUF_STRIDE_ALIGN)
 
 /* Preserve nice_view_gem polarity (black background / white ink by default). */
 #define LVGL_BACKGROUND                                                                    \
-    IS_ENABLED(CONFIG_NICE_VIEW_WIDGET_INVERTED) ? lv_color_white() : lv_color_black()
+	IS_ENABLED(CONFIG_NICE_VIEW_WIDGET_INVERTED) ? lv_color_white() : lv_color_black()
 #define LVGL_FOREGROUND                                                                    \
-    IS_ENABLED(CONFIG_NICE_VIEW_WIDGET_INVERTED) ? lv_color_black() : lv_color_white()
+	IS_ENABLED(CONFIG_NICE_VIEW_WIDGET_INVERTED) ? lv_color_black() : lv_color_white()
 
 struct status_state {
-    uint8_t battery;
-    uint8_t battery_p;
-    bool charging;
-    bool charging_p;
+	uint8_t battery;
+	uint8_t battery_p;
+	bool charging;
+	bool charging_p; /* unused: no reliable R charge flag over split */
 #if !IS_ENABLED(CONFIG_ZMK_SPLIT) || IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
-    struct zmk_endpoint_instance selected_endpoint;
-    int active_profile_index;
-    bool active_profile_connected;
-    bool active_profile_bonded;
-    uint8_t layer_index;
-    const char *layer_label;
+	struct zmk_endpoint_instance selected_endpoint;
+	int active_profile_index;
+	bool active_profile_connected;
+	bool active_profile_bonded;
+	uint8_t layer_index;
 #else
-    bool connected;
+	bool connected;
 #endif
 };
 
-void to_uppercase(char *str);
+void canvas_frame_begin(lv_obj_t *canvas);
+void canvas_frame_end(void);
 void fill_background(lv_obj_t *canvas);
 void init_rect_dsc(lv_draw_rect_dsc_t *rect_dsc, lv_color_t bg_color);
 void init_line_dsc(lv_draw_line_dsc_t *line_dsc, lv_color_t color, uint8_t width);
 void init_label_dsc(lv_draw_label_dsc_t *label_dsc, lv_color_t color, const lv_font_t *font,
-                    lv_text_align_t align);
+		    lv_text_align_t align);
 void canvas_draw_rect(lv_obj_t *canvas, lv_coord_t x, lv_coord_t y, lv_coord_t w, lv_coord_t h,
-                      lv_draw_rect_dsc_t *draw_dsc);
+		      lv_draw_rect_dsc_t *draw_dsc);
 void canvas_draw_text(lv_obj_t *canvas, lv_coord_t x, lv_coord_t y, lv_coord_t max_w,
-                      lv_draw_label_dsc_t *draw_dsc, const char *txt);
+		      lv_draw_label_dsc_t *draw_dsc, const char *txt);
 void canvas_draw_img(lv_obj_t *canvas, lv_coord_t x, lv_coord_t y, const lv_image_dsc_t *src,
-                     lv_draw_image_dsc_t *draw_dsc);
+		     lv_draw_image_dsc_t *draw_dsc);
+/* Side letter in an inverted chip (FG box, BG glyph) + normal % text. */
+void canvas_draw_battery_chip(lv_obj_t *canvas, lv_coord_t x, lv_coord_t y, char side,
+			      uint8_t level, bool charging);

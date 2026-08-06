@@ -1,38 +1,19 @@
-# This file generates the GitHub Actions matrix.
-# For simple board + shield combinations, add them to the top level board and
-# shield arrays, for more control, add individual board + shield combinations
-# to the `include` property. You can also use the `cmake-args` property to
-# pass flags to the build command, `snippet` to add a Zephyr snippet, and
-# `artifact-name` to assign a name to distinguish build outputs from each other:
-#
-# board: [ "nice_nano_v2" ]
-# shield: [ "corne_left", "corne_right" ]
-# include:
-#   - board: bdn9_rev2
-#   - board: nice_nano_v2
-#     shield: reviung41
-#   - board: nice_nano_v2
-#     shield: corne_left
-#     snippet: studio-rpc-usb-uart
-#     cmake-args: -DCONFIG_ZMK_STUDIO=y
-#     artifact-name: corne_left_with_studio
-#
+# nrf52840-nosd on all targets. Flash settings_reset when switching layouts.
+# Daily left: toucan_left_no_studio.
 ---
 include:
-  # Bisect: ZMK main left WITHOUT display. If this enumerates USB, nice_view_gem is the crash.
   - board: xiao_ble//zmk
     shield: toucan_left rgbled_adapter
-    snippet: studio-rpc-usb-uart
+    snippet: nrf52840-nosd studio-rpc-usb-uart
     cmake-args: -DCONFIG_ZMK_STUDIO=y
     artifact-name: toucan_left_bare_studio
-  # Prefer this first when validating display/boot on ZMK main (less RAM than Studio).
   - board: xiao_ble//zmk
     shield: toucan_left rgbled_adapter nice_view_gem
+    snippet: nrf52840-nosd
     artifact-name: toucan_left_no_studio
-  # USB CDC logging for bring-up (flash this, keep USB plugged, then capture COM port).
   - board: xiao_ble//zmk
     shield: toucan_left rgbled_adapter nice_view_gem
-    snippet: zmk-usb-logging
+    snippet: nrf52840-nosd zmk-usb-logging
     cmake-args: >-
       -DCONFIG_LOG_PROCESS_THREAD_STARTUP_DELAY_MS=8000
       -DCONFIG_ZMK_LOG_LEVEL_DBG=y
@@ -40,10 +21,20 @@ include:
     artifact-name: toucan_left_usb_logging
   - board: xiao_ble//zmk
     shield: toucan_left rgbled_adapter nice_view_gem
-    snippet: studio-rpc-usb-uart
+    snippet: nrf52840-nosd studio-rpc-usb-uart
     cmake-args: -DCONFIG_ZMK_STUDIO=y
     artifact-name: toucan_left_with_studio
   - board: xiao_ble//zmk
     shield: toucan_right rgbled_adapter
+    snippet: nrf52840-nosd
+  - board: xiao_ble//zmk
+    shield: toucan_right rgbled_adapter
+    snippet: nrf52840-nosd zmk-usb-logging
+    cmake-args: >-
+      -DCONFIG_INPUT_EVENT_DUMP=y
+      -DCONFIG_ZMK_LOG_LEVEL_DBG=y
+      -DCONFIG_INPUT_LOG_LEVEL_DBG=y
+    artifact-name: toucan_right_debug
   - board: xiao_ble//zmk
     shield: settings_reset
+    snippet: nrf52840-nosd

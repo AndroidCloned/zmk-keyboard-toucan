@@ -1,0 +1,22 @@
+# West / local Docker build workspace (never commit)
+.west/
+zmk/
+zmk-rgbled-widget/
+modules/
+bootloader/
+tools/
+build/
+build-nightly-run.log
+
+# Keep only zephyr/module.yml in-tree; ignore accidental full Zephyr checkouts
+zephyr/*
+!zephyr/module.yml
+
+# Local research / debug — keep out of the public tree
+docs/datasheets/**/*.pdf
+docs/datasheets/reference/zephyr-cirque-pinnacle-spi-binding.txt
+docs/datasheets/reference/cirque-pinnacle-2bndy5-README.rst
+ha-backups/
+debug-*.log
+*.elf
+canvases/
