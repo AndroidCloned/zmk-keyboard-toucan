@@ -1,33 +1,34 @@
 if SHIELD_TOUCAN_LEFT
 
 config ZMK_KEYBOARD_NAME
-    default "Toucan"
+	default "Toucan"
 
 config ZMK_SPLIT_ROLE_CENTRAL
-    default y
+	default y
 
 config ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING
-    default y
+	default y
 
+# Fetch for the gem L/R chips only. PROXY publishes a second BAS that Windows
+# often treats as "the" battery; ZMK writes 0% on split disconnect, which makes
+# the tray jump to 0% during brief right-half flaps.
 config ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_PROXY
-    default y
+	default n
 
 endif
-
-
 
 if SHIELD_TOUCAN_LEFT || SHIELD_TOUCAN_RIGHT
 
 config SPI
-    default y
+	default y
 
 config ZMK_SPLIT
-    default y
+	default y
 
 config ZMK_POINTING
-    default y
+	default y
 
 config RGBLED_WIDGET_BATTERY_LEVEL_HIGH
-    default 40
+	default 40
 
 endif

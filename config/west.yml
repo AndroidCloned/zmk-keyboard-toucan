@@ -1,17 +1,18 @@
 manifest:
-  defaults:
-    revision: main
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
     - name: caksoylar
       url-base: https://github.com/caksoylar
   projects:
+    # PROD pin — SHAs from toucan-zmk-west volume at graduation (2026-08-09).
+    # Do not float on main for release builds.
     - name: zmk
       remote: zmkfirmware
+      revision: f2fa3905c8a1e2e8e033e9d3dbb98b2067e69e1f
       import: app/west.yml
     - name: zmk-rgbled-widget
       remote: caksoylar
-      revision: main
+      revision: e6b467792a1dabef8cfa5c9fd26bfefc9c16662b
   self:
     path: config

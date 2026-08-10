@@ -147,7 +147,10 @@ void canvas_draw_battery_chip(lv_obj_t *canvas, lv_coord_t x, lv_coord_t y, char
 		}
 	}
 
-	if (charging) {
+	if (level > 100) {
+		/* Unknown / not yet sampled — avoid painting a fake 0%. */
+		snprintk(pct, sizeof(pct), "--");
+	} else if (charging) {
 		snprintk(pct, sizeof(pct), "%" PRIu8 "%%+", level);
 	} else {
 		snprintk(pct, sizeof(pct), "%" PRIu8 "%%", level);
