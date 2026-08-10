@@ -32,7 +32,8 @@
 		status = "okay";
 		/* HW_DR is active-high on this board. */
 		data-ready-gpios = <&gpio0 2 GPIO_ACTIVE_HIGH>;
-		sensitivity = "2x";
+		/* 1x = most sensitive (2x was weak for dry fingertips). */
+		sensitivity = "1x";
 		data-mode = "relative";
 		idle-packets-count = <0>;
 		primary-tap-enable;

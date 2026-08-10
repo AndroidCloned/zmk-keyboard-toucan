@@ -343,9 +343,8 @@ static int cirque_boot_prewake(void)
 SYS_INIT(cirque_boot_prewake, POST_KERNEL, CIRQUE_BOOT_PREWAKE_PRIO);
 
 /*
- * After pinnacle_init: only force-wake if still shut down. Otherwise restore
- * CAL_CONFIG1 defaults (heals a wiped-comp-bits flash) + clear + feed.
- * pinnacle_init already RESET-calibrated — do not run a second CALIBRATE here.
+ * After pinnacle_init: force-wake if still shut down; otherwise recalibrate
+ * with the DT sensitivity already applied (ADC attenuation) + feed.
  */
 static int cirque_boot_followup(void)
 {
@@ -366,8 +365,8 @@ static int cirque_boot_followup(void)
 		return 0;
 	}
 
-	LOG_INF("Cirque boot follow-up restore CAL+feed");
-	(void)cirque_restore_cal_config();
+	LOG_INF("Cirque boot follow-up recalibrate+feed");
+	(void)cirque_recalibrate();
 	(void)cirque_clear_status1();
 	(void)cirque_feed_set(true);
 	return 0;
